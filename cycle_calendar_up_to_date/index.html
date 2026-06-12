@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Calendar | Aura Health</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fertile-glow {
+            box-shadow: 0 0 15px 2px rgba(48, 98, 138, 0.2);
+            background: linear-gradient(135deg, rgba(205, 229, 255, 0.4) 0%, rgba(129, 177, 220, 0.2) 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 237, 237, 0.8);
+        }
+        body {
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dcc0bf;
+            border-radius: 10px;
+        }
+        .mask-fade {
+            mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#fff8f7",
+                        "on-tertiary-container": "#024469",
+                        "secondary-fixed-dim": "#ffb3b3",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#7f282c",
+                        "tertiary": "#30628a",
+                        "on-tertiary-fixed-variant": "#104a70",
+                        "on-secondary-fixed-variant": "#6d3738",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "outline": "#897271",
+                        "primary-fixed": "#ffdad8",
+                        "on-primary-container": "#772126",
+                        "primary": "#9e3f42",
+                        "inverse-primary": "#ffb3b1",
+                        "secondary-fixed": "#ffdad9",
+                        "on-surface": "#1f1b1b",
+                        "tertiary-container": "#81b1dc",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "on-secondary-fixed": "#370d10",
+                        "inverse-surface": "#342f30",
+                        "surface-variant": "#eae0e0",
+                        "surface-dim": "#e1d8d8",
+                        "outline-variant": "#dcc0bf",
+                        "on-background": "#1f1b1b",
+                        "on-surface-variant": "#554241",
+                        "inverse-on-surface": "#f8eeee",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fff8f7",
+                        "tertiary-fixed-dim": "#9bcbf8",
+                        "surface": "#fff8f7",
+                        "tertiary-fixed": "#cde5ff",
+                        "on-tertiary-fixed": "#001d32",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#f0e6e6",
+                        "secondary": "#894e4f",
+                        "surface-tint": "#9e3f42",
+                        "on-secondary-container": "#7b4243",
+                        "primary-container": "#ff8a8a",
+                        "surface-container-highest": "#eae0e0",
+                        "surface-container": "#f5ecec",
+                        "surface-container-low": "#fbf1f1",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#410007",
+                        "on-primary": "#ffffff"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "container-padding-mobile": "24px",
+                        "container-padding-desktop": "48px",
+                        "gutter": "16px",
+                        "section-gap": "32px",
+                        "stack-sm": "4px",
+                        "stack-md": "12px",
+                        "stack-lg": "24px"
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- Top App Bar -->
+<header class="w-full top-0 sticky z-50 bg-background/80 backdrop-blur-xl flex justify-between items-center px-container-padding-mobile py-stack-md">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A professional close-up portrait of a young woman with a serene expression, softly lit by natural morning light. The background is a blurred, minimalist interior with warm peach and cream tones, aligning with the Aura Health brand identity. The photography is high-end, editorial style, emphasizing clean skin and calm energy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBb5UY3kUE3MfAkHVxrAfDpblnA6AdcW_lXU6TU2GUKJjIoq3kHhgA1cghl2fcPyQmlVyXO0JzzpvZclIkzA6iswlIS1_jWP_lUqEidtNvY0LmDvxUqSFf6D9vSxIjm4xLk-_802ldfYsZHNFDeBk0LqqzKtb2QF8A65kqGGx_bXRCrXcQ-SrCBgM-YSFZVsvFpOeB_eLCuKG5BJOhLt-C2HhgKaUXt4A4_z_kFT3pKpmAQNEjpzfUqZk3ZoF7nBGjcB3xpdDBdjw"/>
+</div>
+<h1 class="font-headline-md text-headline-md-mobile text-primary tracking-tight">Aura Health</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</button>
+</header>
+<main class="px-container-padding-mobile pt-stack-lg space-y-stack-lg max-w-2xl mx-auto">
+<!-- Month Selector -->
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface" id="current-month-display">October 2023</h2>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-surface-container transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="p-2 rounded-full hover:bg-surface-container transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<!-- Full Month Calendar Card -->
+<section class="glass-card rounded-[2rem] p-6 shadow-sm">
+<div class="grid grid-cols-7 gap-y-4 text-center" id="calendar-grid">
+<!-- Day Labels -->
+<div class="text-on-surface-variant font-label-sm text-label-sm">M</div>
+<div class="text-on-surface-variant font-label-sm text-label-sm">T</div>
+<div class="text-on-surface-variant font-label-sm text-label-sm">W</div>
+<div class="text-on-surface-variant font-label-sm text-label-sm">T</div>
+<div class="text-on-surface-variant font-label-sm text-label-sm">F</div>
+<div class="text-on-surface-variant font-label-sm text-label-sm">S</div>
+<div class="text-on-surface-variant font-label-sm text-label-sm text-primary">S</div>
+<!-- Calendar content will be dynamically updated by sync script -->
+<!-- Placeholder items for initial render match requested UI -->
+<div class="text-outline-variant font-body-md text-body-md opacity-30 py-3">25</div>
+<div class="text-outline-variant font-body-md text-body-md opacity-30 py-3">26</div>
+<div class="text-outline-variant font-body-md text-body-md opacity-30 py-3">27</div>
+<div class="text-outline-variant font-body-md text-body-md opacity-30 py-3">28</div>
+<div class="text-outline-variant font-body-md text-body-md opacity-30 py-3">29</div>
+<div class="text-outline-variant font-body-md text-body-md opacity-30 py-3">30</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer" data-date="2023-10-01">
+<span class="font-body-md text-body-md z-10">1</span>
+<div class="w-1.5 h-1.5 rounded-full bg-primary mt-1"></div>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer" data-date="2023-10-02">
+<span class="font-body-md text-body-md z-10">2</span>
+<div class="w-1.5 h-1.5 rounded-full bg-primary mt-1"></div>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer" data-date="2023-10-03">
+<span class="font-body-md text-body-md z-10">3</span>
+<div class="w-1.5 h-1.5 rounded-full bg-primary mt-1"></div>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer" data-date="2023-10-04">
+<span class="font-body-md text-body-md z-10">4</span>
+<div class="w-1.5 h-1.5 rounded-full bg-primary mt-1"></div>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer" data-date="2023-10-05">
+<span class="font-body-md text-body-md z-10">5</span>
+<div class="w-1.5 h-1.5 rounded-full bg-primary mt-1"></div>
+</div>
+<div class="py-3 font-body-md text-body-md">6</div>
+<div class="py-3 font-body-md text-body-md">7</div>
+<div class="py-3 font-body-md text-body-md">8</div>
+<div class="py-3 font-body-md text-body-md">9</div>
+<div class="py-3 font-body-md text-body-md">10</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer fertile-glow rounded-xl" data-date="2023-10-11">
+<span class="font-body-md text-body-md text-tertiary font-bold z-10">11</span>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer fertile-glow rounded-xl" data-date="2023-10-12">
+<span class="font-body-md text-body-md text-tertiary font-bold z-10">12</span>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer fertile-glow rounded-xl" data-date="2023-10-13">
+<span class="font-body-md text-body-md text-tertiary font-bold z-10">13</span>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer fertile-glow rounded-xl border-2 border-tertiary-container shadow-lg scale-110" data-date="2023-10-14" id="initial-selection">
+<span class="font-body-md text-body-md text-tertiary font-bold z-10">14</span>
+<div class="absolute -top-1 -right-1"><span class="material-symbols-outlined text-[12px] text-tertiary" style="font-variation-settings: 'FILL' 1;">star</span></div>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer fertile-glow rounded-xl" data-date="2023-10-15">
+<span class="font-body-md text-body-md text-tertiary font-bold z-10">15</span>
+</div>
+<div class="py-3 font-body-md text-body-md">16</div>
+<div class="py-3 font-body-md text-body-md">17</div>
+<div class="py-3 font-body-md text-body-md">18</div>
+<div class="py-3 font-body-md text-body-md">19</div>
+<div class="py-3 font-body-md text-body-md">20</div>
+<div class="py-3 font-body-md text-body-md">21</div>
+<div class="py-3 font-body-md text-body-md">22</div>
+<div class="py-3 font-body-md text-body-md">23</div>
+<div class="py-3 font-body-md text-body-md">24</div>
+<div class="py-3 font-body-md text-body-md">25</div>
+<div class="py-3 font-body-md text-body-md">26</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer border-2 border-dashed border-primary/40 rounded-full" data-date="2023-10-27">
+<span class="font-body-md text-body-md text-primary/60">27</span>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer border-2 border-dashed border-primary/40 rounded-full" data-date="2023-10-28">
+<span class="font-body-md text-body-md text-primary/60">28</span>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer border-2 border-dashed border-primary/40 rounded-full" data-date="2023-10-29">
+<span class="font-body-md text-body-md text-primary/60">29</span>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer border-2 border-dashed border-primary/40 rounded-full" data-date="2023-10-30">
+<span class="font-body-md text-body-md text-primary/60">30</span>
+</div>
+<div class="relative py-3 flex flex-col items-center group cursor-pointer border-2 border-dashed border-primary/40 rounded-full" data-date="2023-10-31">
+<span class="font-body-md text-body-md text-primary/60">31</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="mt-8 flex flex-wrap justify-center gap-4 border-t border-surface-variant pt-6">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Period</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full border border-dashed border-primary"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Predicted</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-tertiary-container/40 ring-2 ring-tertiary/20"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Fertile</span>
+</div>
+</div>
+</section>
+<!-- Daily Summary Section -->
+<section class="space-y-stack-md" id="daily-details-section">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Selected Date</p>
+<h3 class="font-headline-md text-headline-md text-on-surface" id="selected-date-title">Oct 14, Saturday</h3>
+</div>
+<button class="flex items-center gap-1 text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                    Edit
+                </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="details-grid">
+<!-- Logged Symptoms -->
+<div class="glass-card rounded-2xl p-5 flex items-start gap-4 shadow-sm border-l-4 border-primary" id="symptoms-card">
+<div class="p-2 bg-primary-container/20 rounded-xl">
+<span class="material-symbols-outlined text-primary">personal_injury</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Symptoms</p>
+<div class="flex flex-wrap gap-2 mt-2" id="symptoms-list">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-sm text-label-sm">Cramps: Mild</span>
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-sm text-label-sm">Bloating</span>
+</div>
+</div>
+</div>
+<!-- Mood -->
+<div class="glass-card rounded-2xl p-5 flex items-start gap-4 shadow-sm border-l-4 border-tertiary" id="mood-card">
+<div class="p-2 bg-tertiary-container/20 rounded-xl">
+<span class="material-symbols-outlined text-tertiary">mood</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Mood &amp; Energy</p>
+<div class="flex flex-wrap gap-2 mt-2" id="mood-list">
+<span class="bg-tertiary/10 text-tertiary px-3 py-1 rounded-full font-label-sm text-label-sm">Mood: Energetic</span>
+<span class="bg-tertiary/10 text-tertiary px-3 py-1 rounded-full font-label-sm text-label-sm">Focused</span>
+</div>
+</div>
+</div>
+<!-- Insight Bento -->
+<div class="md:col-span-2 relative overflow-hidden glass-card rounded-[2rem] p-6 shadow-sm min-h-[140px] flex items-center" id="insight-card">
+<div class="relative z-10 flex-1">
+<h4 class="font-headline-md text-headline-md text-on-tertiary-container" id="insight-title">Peak Fertility</h4>
+<p class="font-body-md text-body-md text-on-tertiary-container/80 mt-2 max-w-[70%]" id="insight-desc">Your hormonal levels suggest peak fertility today. A great time for focused creative projects!</p>
+</div>
+<div class="absolute right-[-10px] top-0 bottom-0 w-1/3">
+<img alt="Fertility Art" class="w-full h-full object-cover opacity-60 mask-fade" data-alt="A soft-focus, abstract photographic composition of delicate cherry blossoms against a clear, soft purple and blue twilight sky. The lighting is ethereal and dreamy, capturing the essence of peak fertility and biological blooming. The colors are muted pastels, fitting the Aura Health calming visual identity." id="insight-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjZ-KxtSI_QdKdNznfHANB8qKiwTvQoyp8BOrdMcwzJOewvWVbqUjneeSdy--yENPc_a09q41l28GkBgbNMw5m7wgEI4LYjpZrSsQrwcWfBT0vhQas1pFLXOGxQlG_Pci4Ax3gvRYZzwdUDEKvQUHnzuDRDv1QjK6Lr6wMa5EopT5U-5FepNhYQN0KcfEkOM1f5PNEUhHBQjC4JbM7kIURdH_At_HBdkm7-ZTOeuq8lKZTSFjbRO3Zg4Ewu2m8e-fLZD3c07WigGY"/>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-gutter pb-6 pt-3 bg-surface/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(158,63,66,0.08)] z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">radio_button_checked</span>
+<span class="font-label-sm text-label-sm">Today</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-full px-4 py-1 active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="font-label-sm text-label-sm">Calendar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[32px] text-primary">add_circle</span>
+<span class="font-label-sm text-label-sm">Log</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-sm text-label-sm">Insights</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<!-- Firebase SDK Integration -->
+<script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBRewFVjpVaU033wbEfrljqphLqbAxi4VA",
+            authDomain: "periods-8734c.firebaseapp.com",
+            databaseURL: "https://periods-8734c-default-rtdb.firebaseio.com",
+            projectId: "periods-8734c",
+            storageBucket: "periods-8734c.firebasestorage.app",
+            messagingSenderId: "1042488455165",
+            appId: "1:1042488455165:web:e364a8b55e07d3dcc63394",
+            measurementId: "G-WVCCDS6P1Q"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let cachedData = null;
+
+        // Dynamic UI Update logic
+        function updateDetailsUI(dateKey) {
+            if (!cachedData || !cachedData.dates || !cachedData.dates[dateKey]) {
+                // Handle empty state or default state
+                document.getElementById('selected-date-title').innerText = formatDateString(dateKey);
+                document.getElementById('symptoms-list').innerHTML = '<span class="text-on-surface-variant opacity-50 italic">No symptoms logged</span>';
+                document.getElementById('mood-list').innerHTML = '<span class="text-on-surface-variant opacity-50 italic">No mood logged</span>';
+                document.getElementById('insight-title').innerText = "Normal Day";
+                document.getElementById('insight-desc').innerText = "Continue your daily self-care routine. Stay hydrated and well-rested.";
+                return;
+            }
+
+            const dayData = cachedData.dates[dateKey];
+            
+            // Update Title
+            document.getElementById('selected-date-title').innerText = formatDateString(dateKey);
+
+            // Update Symptoms
+            const sympContainer = document.getElementById('symptoms-list');
+            sympContainer.innerHTML = '';
+            if (dayData.symptoms && dayData.symptoms.length > 0) {
+                dayData.symptoms.forEach(s => {
+                    const chip = document.createElement('span');
+                    chip.className = "bg-primary/10 text-primary px-3 py-1 rounded-full font-label-sm text-label-sm";
+                    chip.innerText = s;
+                    sympContainer.appendChild(chip);
+                });
+            } else {
+                sympContainer.innerHTML = '<span class="text-on-surface-variant opacity-50 italic">No symptoms logged</span>';
+            }
+
+            // Update Mood
+            const moodContainer = document.getElementById('mood-list');
+            moodContainer.innerHTML = '';
+            if (dayData.mood && dayData.mood.length > 0) {
+                dayData.mood.forEach(m => {
+                    const chip = document.createElement('span');
+                    chip.className = "bg-tertiary/10 text-tertiary px-3 py-1 rounded-full font-label-sm text-label-sm";
+                    chip.innerText = m;
+                    moodContainer.appendChild(chip);
+                });
+            } else {
+                moodContainer.innerHTML = '<span class="text-on-surface-variant opacity-50 italic">No mood logged</span>';
+            }
+
+            // Update Insights
+            const insightTitle = document.getElementById('insight-title');
+            const insightDesc = document.getElementById('insight-desc');
+            const insightCard = document.getElementById('insight-card');
+
+            if (dayData.type === 'fertile') {
+                insightTitle.innerText = "Peak Fertility";
+                insightDesc.innerText = "Your hormonal levels suggest peak fertility today. A great time for focused creative projects!";
+                insightCard.classList.remove('bg-surface-variant');
+            } else if (dayData.type === 'period') {
+                insightTitle.innerText = "Cycle Day " + (dayData.dayCount || '1');
+                insightDesc.innerText = "Prioritize rest and gentle movement. Iron-rich foods can support your energy levels today.";
+            } else {
+                insightTitle.innerText = "Body Awareness";
+                insightDesc.innerText = "Listening to your body's subtle signals today can help you stay balanced and energized.";
+            }
+        }
+
+        function formatDateString(dateStr) {
+            const date = new Date(dateStr);
+            const options = { month: 'short', day: 'numeric', weekday: 'long' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        // Initialize and watch data
+        window.syncCycleData = () => {
+            const cycleRef = ref(db, 'cycle_data/october_2023');
+            onValue(cycleRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    cachedData = data;
+                    console.log("Firebase Data Synced:", data);
+                    // Initial update for the default selection
+                    updateDetailsUI('2023-10-14');
+                }
+            });
+        };
+
+        window.syncCycleData();
+
+        // Attach listeners to calendar days
+        document.querySelectorAll('.cursor-pointer').forEach(day => {
+            day.addEventListener('click', function() {
+                document.querySelectorAll('.cursor-pointer').forEach(d => {
+                    d.classList.remove('ring-2', 'ring-primary/40', 'scale-110');
+                });
+                this.classList.add('ring-2', 'ring-primary/40');
+                
+                const selectedDate = this.getAttribute('data-date');
+                if (selectedDate) {
+                    updateDetailsUI(selectedDate);
+                }
+
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
+            });
+        });
+    </script>
+</body></html>

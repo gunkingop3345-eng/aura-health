@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aura Health - Your Cycle Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Firebase SDK Compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#fff8f7",
+                    "on-tertiary-container": "#024469",
+                    "secondary-fixed-dim": "#ffb3b3",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#7f282c",
+                    "tertiary": "#30628a",
+                    "on-tertiary-fixed-variant": "#104a70",
+                    "on-secondary-fixed-variant": "#6d3738",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "outline": "#897271",
+                    "primary-fixed": "#ffdad8",
+                    "on-primary-container": "#772126",
+                    "primary": "#9e3f42",
+                    "inverse-primary": "#ffb3b1",
+                    "secondary-fixed": "#ffdad9",
+                    "on-surface": "#1f1b1b",
+                    "tertiary-container": "#81b1dc",
+                    "primary-fixed-dim": "#ffb3b1",
+                    "on-secondary-fixed": "#370d10",
+                    "inverse-surface": "#342f30",
+                    "surface-variant": "#eae0e0",
+                    "surface-dim": "#e1d8d8",
+                    "outline-variant": "#dcc0bf",
+                    "on-background": "#1f1b1b",
+                    "on-surface-variant": "#554241",
+                    "inverse-on-surface": "#f8eeee",
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#fff8f7",
+                    "tertiary-fixed-dim": "#9bcbf8",
+                    "surface": "#fff8f7",
+                    "tertiary-fixed": "#cde5ff",
+                    "on-tertiary-fixed": "#001d32",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#f0e6e6",
+                    "secondary": "#894e4f",
+                    "surface-tint": "#9e3f42",
+                    "on-secondary-container": "#7b4243",
+                    "primary-container": "#ff8a8a",
+                    "surface-container-highest": "#eae0e0",
+                    "surface-container": "#f5ecec",
+                    "surface-container-low": "#fbf1f1",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed": "#410007",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "container-padding-mobile": "24px",
+                    "container-padding-desktop": "48px",
+                    "gutter": "16px",
+                    "section-gap": "32px",
+                    "stack-sm": "4px",
+                    "stack-md": "12px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "label-md": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .premium-shadow {
+            box-shadow: 0 10px 30px -10px rgba(158, 63, 66, 0.12);
+        }
+        .inner-glow {
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+        .glass-nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #9e3f42 0%, #ff8a8a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bar-transition {
+            transition: height 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-32">
+<!-- Top App Bar -->
+<header class="w-full top-0 sticky z-50 bg-background/80 backdrop-blur-xl flex justify-between items-center px-container-padding-mobile py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-primary to-primary-container">
+<div class="w-full h-full rounded-full overflow-hidden border-2 border-background">
+<img alt="User profile photo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbIU5ExYLyNNWtPkaG1PQRitCJlU6TBUSTIpho0AELTI6tPOGLcSyZ5YSfHZJ6Ui14I1VqDRNzEVZd5bFUlvJP2SoIiPMwrtYfFQQiPcb1TWKMK893R6PQ1--SVFsZ3Xtf7NVDljXNd5jpg_Pc9DdwSOR46XjX1yQ6IZMT22vN-8mE2H1txYtA2jTklY-315u1CNTWaLVtf19mMFk-thAE3McXlphcLZ4G3lHVQsY1qP1fGRTWOiNiG2Knmr0m0BzQ_1_-vTtUD1k"/>
+</div>
+</div>
+<h1 class="font-bold text-lg text-primary tracking-tight">Aura Health</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+</header>
+<main class="px-container-padding-mobile mt-4 space-y-8">
+<!-- Personalized Greeting -->
+<div class="space-y-1">
+<h2 class="text-2xl font-bold text-on-surface tracking-tight" id="greeting-text">Good morning,</h2>
+<p class="text-sm font-medium text-on-surface-variant">We're glad to see you today.</p>
+</div>
+<!-- Central Cycle Ring Section -->
+<section class="flex flex-col items-center justify-center relative py-4">
+<div class="relative w-72 h-72 flex items-center justify-center">
+<!-- Refined Progress Ring -->
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<defs>
+<lineargradient id="ringGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#9e3f42"></stop>
+<stop offset="100%" stop-color="#ffb3b1"></stop>
+</lineargradient>
+</defs>
+<circle class="text-surface-container/50" cx="144" cy="144" fill="transparent" r="130" stroke="currentColor" stroke-width="8"></circle>
+<circle cx="144" cy="144" fill="transparent" r="130" stroke="url(#ringGradient)" stroke-dasharray="816" stroke-dashoffset="450" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<!-- Inner Content -->
+<div class="text-center z-10 w-56 h-56 rounded-full bg-white flex flex-col items-center justify-center inner-glow">
+<p class="font-label-sm text-[11px] text-on-surface-variant uppercase tracking-[0.2em] mb-1">Current Phase</p>
+<h2 class="text-5xl font-bold gradient-text">Day 12</h2>
+<p class="font-medium text-sm text-primary mt-2">Follicular Phase</p>
+</div>
+</div>
+<!-- Countdown Alert -->
+<div class="mt-8 flex items-center gap-3 bg-white/60 border border-primary-container/20 px-6 py-3 rounded-2xl premium-shadow animate-float">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<p class="font-medium text-sm text-on-primary-container">5 days until next period</p>
+</div>
+</section>
+<!-- Horizontal Insights Section -->
+<section>
+<div class="flex justify-between items-center mb-4 px-1">
+<h3 class="font-bold text-lg text-on-surface">Daily Insights</h3>
+<button class="text-xs font-bold text-primary uppercase tracking-wider">See All</button>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-6 -mx-container-padding-mobile px-container-padding-mobile no-scrollbar snap-x">
+<!-- Insight Card 1 -->
+<div class="min-w-[280px] bg-white p-6 rounded-3xl premium-shadow snap-start border border-white">
+<div class="w-10 h-10 bg-tertiary-container/10 text-tertiary rounded-xl flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<h4 class="font-bold text-base text-on-surface mb-2">Energy Peak Incoming</h4>
+<p class="text-sm leading-relaxed text-on-surface-variant">Estrogen is rising. Today is perfect for high-intensity movement or tackling complex tasks.</p>
+</div>
+<!-- Insight Card 2 -->
+<div class="min-w-[280px] bg-white p-6 rounded-3xl premium-shadow snap-start border border-white">
+<div class="w-10 h-10 bg-secondary-container/10 text-secondary rounded-xl flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">spa</span>
+</div>
+<h4 class="font-bold text-base text-on-surface mb-2">Skin Care Tip</h4>
+<p class="text-sm leading-relaxed text-on-surface-variant">Hydration is key today. Your skin might feel slightly drier during this phase of your cycle.</p>
+</div>
+</div>
+</section>
+<!-- Mood Trend Section -->
+<section class="bg-white p-6 rounded-3xl premium-shadow border border-white">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-bold text-lg text-on-surface">Your Mood Trend</h3>
+<div class="bg-surface-container px-2 py-1 rounded-lg">
+<span class="material-symbols-outlined text-primary text-lg">insights</span>
+</div>
+</div>
+<div class="h-32 w-full flex items-end justify-between gap-3 px-1 mb-4">
+<!-- Modern Bar Chart -->
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container-low rounded-full bar-transition relative overflow-hidden" style="height: 60%;">
+<div class="absolute inset-0 bg-primary-container/30"></div>
+</div>
+<span class="text-[10px] font-bold text-outline">M</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container-low rounded-full bar-transition relative overflow-hidden" style="height: 40%;">
+<div class="absolute inset-0 bg-primary-container/30"></div>
+</div>
+<span class="text-[10px] font-bold text-outline">T</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container-low rounded-full bar-transition relative overflow-hidden" style="height: 80%;">
+<div class="absolute inset-0 bg-primary-container/50"></div>
+</div>
+<span class="text-[10px] font-bold text-outline">W</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container-low rounded-full bar-transition relative overflow-hidden" style="height: 55%;">
+<div class="absolute inset-0 bg-primary-container/50"></div>
+</div>
+<span class="text-[10px] font-bold text-outline">T</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-gradient-to-t from-primary to-primary-container rounded-full bar-transition" style="height: 90%;"></div>
+<span class="text-[10px] font-bold text-primary">F</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container-low rounded-full bar-transition" style="height: 15%;"></div>
+<span class="text-[10px] font-bold text-outline">S</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container-low rounded-full bar-transition" style="height: 15%;"></div>
+<span class="text-[10px] font-bold text-outline">S</span>
+</div>
+</div>
+<div class="pt-4 border-t border-surface-container/50 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">mood</span>
+</div>
+<p class="font-bold text-sm text-on-surface">Mostly "Joyful"</p>
+</div>
+<p class="text-xs font-medium text-on-surface-variant">Weekly Avg: <span class="text-primary font-bold">4.2</span></p>
+</div>
+</section>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-24 right-6 z-50">
+<button class="bg-primary text-on-primary flex items-center gap-2 px-6 py-4 rounded-full shadow-[0_8px_25px_rgba(158,63,66,0.4)] active:scale-95 transition-all duration-200" id="log-today-btn">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-bold text-sm tracking-wide">Log Today</span>
+</button>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-8 pt-4 bg-white/90 backdrop-blur-2xl border-t border-surface-container-high z-50">
+<!-- Today Tab (Active) -->
+<a class="flex flex-col items-center justify-center transition-all" href="#">
+<div class="w-12 h-8 rounded-full bg-primary/10 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">radio_button_checked</span>
+</div>
+<span class="text-[10px] font-bold text-primary">Today</span>
+</a>
+<!-- Calendar Tab -->
+<a class="flex flex-col items-center justify-center text-outline transition-all" href="#">
+<div class="w-12 h-8 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+<span class="text-[10px] font-bold">Calendar</span>
+</a>
+<!-- Log Tab -->
+<a class="flex flex-col items-center justify-center text-outline transition-all" href="#">
+<div class="w-12 h-8 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined">edit_note</span>
+</div>
+<span class="text-[10px] font-bold">Log</span>
+</a>
+<!-- Insights Tab -->
+<a class="flex flex-col items-center justify-center text-outline transition-all" href="#">
+<div class="w-12 h-8 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined">query_stats</span>
+</div>
+<span class="text-[10px] font-bold">Insights</span>
+</a>
+<!-- Settings Tab -->
+<a class="flex flex-col items-center justify-center text-outline transition-all" href="#">
+<div class="w-12 h-8 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined">person</span>
+</div>
+<span class="text-[10px] font-bold">Profile</span>
+</a>
+</nav>
+<script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBRewFVjpVaU033wbEfrljqphLqbAxi4VA",
+      authDomain: "periods-8734c.firebaseapp.com",
+      databaseURL: "https://periods-8734c-default-rtdb.firebaseio.com",
+      projectId: "periods-8734c",
+      storageBucket: "periods-8734c.firebasestorage.app",
+      messagingSenderId: "1042488455165",
+      appId: "1:1042488455165:web:e364a8b55e07d3dcc63394",
+      measurementId: "G-WVCCDS6P1Q"
+    };
+
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const database = firebase.database();
+
+    // Fetch Personalized Greeting
+    const fetchGreeting = () => {
+        const now = new Date();
+        const hours = now.getHours();
+        let greetingPrefix = "Good morning";
+        if (hours >= 12 && hours < 17) greetingPrefix = "Good afternoon";
+        if (hours >= 17) greetingPrefix = "Good evening";
+
+        // Listen for user data in Firebase
+        database.ref('user/profile/name').on('value', (snapshot) => {
+            const userName = snapshot.val() || "Jane Doe";
+            const greetingElement = document.getElementById('greeting-text');
+            if (greetingElement) {
+                greetingElement.textContent = `${greetingPrefix}, ${userName}`;
+            }
+        });
+    };
+    fetchGreeting();
+
+    // Log today logic using Firebase
+    const logBtn = document.getElementById('log-today-btn');
+    logBtn.addEventListener('click', () => {
+        logBtn.classList.add('scale-95');
+        
+        // Example of real-time data functionality
+        const timestamp = new Date().toISOString();
+        const logId = Date.now();
+        
+        database.ref('logs/' + logId).set({
+            date: timestamp,
+            type: 'daily_log',
+            status: 'logged'
+        }).then(() => {
+            console.log('Log saved successfully to Firebase');
+            // Success visual feedback
+            logBtn.querySelector('span:last-child').textContent = 'Logged!';
+            logBtn.classList.replace('bg-primary', 'bg-green-600');
+            setTimeout(() => {
+                logBtn.classList.remove('scale-95');
+                logBtn.classList.replace('bg-green-600', 'bg-primary');
+                logBtn.querySelector('span:last-child').textContent = 'Log Today';
+            }, 1500);
+        }).catch((error) => {
+            console.error('Error saving log:', error);
+            logBtn.classList.remove('scale-95');
+        });
+    });
+</script>
+</body></html>
